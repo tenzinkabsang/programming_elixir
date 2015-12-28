@@ -5,26 +5,32 @@ defmodule MyList do
     1 + len(tail)
   end
 
-  def square([]), do: []
-  def square([head | tail]), do: [head * head | square(tail)]
+  def square([]),               do: []
+  def square([head | tail]),    do: [head * head | square(tail)]
 
-  def map([], _func), do: []
+  # Tail-call optimization
+  def square1(list),                 do: _square1(list, [])
+  defp _square1([], acc),            do: Enum.reverse(acc)
+  defp _square1([head | tail], acc), do: _square1(tail, [head * head | acc])
+
+
+  def map([], _func),           do: []
   def map([head | tail], func), do: [func.(head) | map(tail, func)]
 
-  def sum(list), do: _sum(list, 0)
-  defp _sum([], total), do: total
+  def sum(list),                   do: _sum(list, 0)
+  defp _sum([], total),            do: total
   defp _sum([head | tail], total), do: _sum(tail, head + total)
 
   # Exercise
-  def sum1([]), do: 0
+  def sum1([]),            do: 0
   def sum1([head | tail]), do: head + sum1(tail)
 
-  def sum2([]), do: 0
-  def sum2([head | []]), do: head
+  def sum2([]),                   do: 0
+  def sum2([head | []]),          do: head
   def sum2([head, head2 | tail]), do: sum2([head + head2 | tail])
 
 
-  def reduce([], value, _func), do: value
+  def reduce([], value, _func),           do: value
   def reduce([head | tail], value, func), do: reduce(tail, func.(value, head), func)
 
   # Exercise: ListAndRecursion-1
